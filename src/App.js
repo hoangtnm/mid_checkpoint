@@ -1,24 +1,44 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import songList from "./static/songs";
+import { BrowserRouter as Router, Route, Switch, Link } from "react-router-dom";
+import "antd/dist/antd.css";
+import { Layout, Menu } from "antd";
+import Home from "./pages/Home";
+import SongDetails from "./pages/Songs/SongDetails";
 
 function App() {
+  const { Header, Content } = Layout;
+  songList.sort((a, b) => {
+    return new Date(b.publishedDate) - new Date(a.publishedDate);
+  });
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Layout>
+        <Header>
+          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={["2"]}>
+            <Menu.Item key="1">
+              <Link to="/">Home</Link>
+            </Menu.Item>
+            <Menu.Item key="2">
+              <Link to="/songs">Add a Song</Link>
+            </Menu.Item>
+          </Menu>
+        </Header>
+        <Content style={{ padding: "0 50px" }}>
+          {/* <div className="site-layout-content">
+          </div> */}
+          <Switch>
+            <Route path="/" exact>
+            <Home data={songList} />
+            </Route>
+            <Route path="/songs/:id">
+              <SongDetails data={songList} />
+            </Route>
+          </Switch>
+        </Content>
+      </Layout>
+    </Router>
   );
 }
 
